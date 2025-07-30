@@ -8,18 +8,8 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 export default function Home() {
-  const [darkMode, setDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   useEffect(() => {
   AOS.init({
@@ -135,18 +125,10 @@ export default function Home() {
                 </a>
               </li>
               <li>
-                <a href="https://drive.google.com/uc?export=download&id=1HI7GT64HNzet-6Rbgup8VCtOfeU-tSbv" className="relative group text-sm lg:text-[1.3rem]">
+                <a href="https://drive.google.com/uc?export=download&id=1ofqczf9pB7TsG_BW7PvSp7HstdH20hBk" className="relative group text-sm lg:text-[1.3rem]">
                   <span className="relative z-10">CV</span>
                   <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-500 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
                 </a>
-              </li>
-              <li>
-                <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="text-sm lg:text-[1.3rem] rounded border-white hover:text-purple-400 transition"
-                >
-                  {darkMode ? '🌙' : '☀️'}
-                </button>
               </li>
             </ul>
           </nav>
@@ -175,17 +157,9 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a href="https://drive.google.com/uc?export=download&id=1HI7GT64HNzet-6Rbgup8VCtOfeU-tSbv" className="block py-2 text-lg">
+                  <a href="https://drive.google.com/uc?export=download&id=1ofqczf9pB7TsG_BW7PvSp7HstdH20hBk" className="block py-2 text-lg">
                     CV
                   </a>
-                </li>
-                <li>
-                  <button
-                    onClick={() => setDarkMode(!darkMode)}
-                    className="text-lg rounded border-white hover:text-purple-400 transition"
-                  >
-                    {darkMode ? '🌙' : '☀️'}
-                  </button>
                 </li>
               </ul>
             </nav>
@@ -193,7 +167,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex flex-col pt-[5vh]">
+      <main className="flex flex-col pt-[7vh]">
         <section id="home" className="flex flex-row items-center min-h-screen px-4">
           <div className="w-[90%] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="flex flex-col text-center lg:text-left order-2 lg:order-1 animate__animated animate__fadeInLeft">
@@ -227,19 +201,21 @@ export default function Home() {
               <p className="text-sm md:text-lg lg:text-xl my-4 max-w-2xl">
                 I am currently studying as a student in the Software Engineering (RPL) department at SMK Negeri 1 Denpasar, Bali. While focusing on web development, I&#39;m also learning modern technologies like React, and actively building projects to improve my skills.
               </p>
-              <a href="https://drive.google.com/uc?export=download&id=1HI7GT64HNzet-6Rbgup8VCtOfeU-tSbv" className="self-center lg:self-start">
-                <button className="border border-purple-700 rounded px-6 py-3 hover:bg-purple-950 transition mt-4 text-lg md:text-xl">
-                  Get my CV
-                </button>
+              <a
+                href="https://drive.google.com/uc?export=download&id=1ofqczf9pB7TsG_BW7PvSp7HstdH20hBk"
+                className="self-center lg:self-start border border-purple-700 rounded px-6 py-3 hover:bg-purple-950 transition mt-4 text-lg md:text-xl cursor-pointer inline-block text-center"
+              >
+                Get my CV
               </a>
+
             </div>
-            <div className="flex justify-center items-center order-1 lg:order-2 animate__fadeInRight animate__animated">
+            <div className="flex justify-center items-center order-1 lg:order-2 animate__fadeInRight animate__animated mt-8 lg:mt-0">
               <Image
-                src="/img/home2.png"
+                src="/img/home1.png"
                 alt="imgHome"
                 width={700}
                 height={600}
-                className="w-96 h-96 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] object-contain"
+                className="w-96 h-96 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] object-contain drop-shadow-[0_0_60px_rgba(128,0,255,0.5)]"
               />
             </div>
           </div>
@@ -260,14 +236,14 @@ export default function Home() {
               <div data-aos="fade-up">
                 <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4">Present</h3>
                 <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
-                  Currently, I am a software engineering student at SMKN 1 Denpasar majoring in Software Engineering. I&#39;m currently learning HTML, CSS, JavaScript and interested in UI/UX design using tools like Figma.
+                  Currently, I am a software engineering student at SMKN 1 Denpasar majoring in Software Engineering. I&#39;m currently learning JavaScript, Laravel, React, and UI/UX design using tools like Figma.
                 </p>
               </div>
 
               <div data-aos="fade-left">
                 <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4">Future</h3>
                 <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
-                  Aspiring to become a full-stack developer, planning to master modern frameworks like React and Node.js. Looking forward to contributing to innovative projects and continuous learning.
+                  Aspiring to become a full-stack developer, planning to master modern frameworks like Node.js and React. Looking forward to contributing to innovative projects and continuous learning.
                 </p>
               </div>
             </div>
@@ -310,7 +286,6 @@ export default function Home() {
                 { title: "Node.js", icon: "https://img.icons8.com/?size=100&id=54087&format=png&color=ffffff" },
                 { title: "PHP", icon: "https://img.icons8.com/?size=100&id=UGYn5TapNioV&format=png&color=ffffff" },
                 { title: "Laravel", icon: "https://img.icons8.com/?size=100&id=lRjcvhvtR81o&format=png&color=ffffff" },
-                { title: "Firebase", icon: "https://img.icons8.com/?size=100&id=62452&format=png&color=ffffff" },
                 { title: "MySQL", icon: "https://img.icons8.com/?size=100&id=UFXRpPFebwa2&format=png&color=ffffff" },
               ].map((skill, i) => (
                 <div key={i} className="cursor-default flex flex-col sm:flex-row items-center border border-purple-500 bg-purple-500/10 backdrop-blur-sm rounded-lg p-3 lg:p-4 hover:shadow-[0_0_20px_rgba(255,0,255,0.5)] transition-all duration-300">
@@ -402,48 +377,78 @@ export default function Home() {
 
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
               <div className="flex-1 flex flex-col gap-6 lg:gap-8" data-aos="fade-right">
-                <div className="flex items-start gap-4">
-                  <div className="bg-white text-black p-3 rounded-full text-xl">
-                    🏠
-                  </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl font-medium">Address</h2>
-                    <p className="text-sm md:text-base text-gray-300">Indonesia, Bali.</p>
-                  </div>
-                </div>
+  <div className="flex items-start gap-4">
+    <div className="bg-white p-3 rounded-full">
+      <Image
+        src="https://img.icons8.com/ios-filled/50/000000/marker.png"
+        alt="address-icon"
+        width={28}
+        height={28}
+        className="w-6 h-6 md:w-7 md:h-7"
+      />
+    </div>
+    <div>
+      <h2 className="text-lg md:text-xl font-medium">Address</h2>
+      <p className="text-sm md:text-base text-gray-300">Indonesia, Bali.</p>
+    </div>
+  </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-white text-black p-3 rounded-full text-xl">
-                    📞
-                  </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl font-medium">Phone</h2>
-                    <p className="text-sm md:text-base text-gray-300">+62 8953-9234-1700</p>
-                  </div>
-                </div>
+  <div className="flex items-start gap-4">
+    <div className="bg-white p-3 rounded-full">
+      <Image
+        src="https://img.icons8.com/ios-filled/50/000000/phone.png"
+        alt="phone-icon"
+        width={28}
+        height={28}
+        className="w-6 h-6 md:w-7 md:h-7"
+      />
+    </div>
+    <div>
+      <h2 className="text-lg md:text-xl font-medium">Phone</h2>
+      <p className="text-sm md:text-base text-gray-300">+62 8953-9234-1700</p>
+    </div>
+  </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-white text-black p-3 rounded-full text-xl">
-                    ✉️
-                  </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl font-medium">Email</h2>
-                    <p className="text-sm md:text-base text-gray-300">anjayp271@gmail.com</p>
-                  </div>
-                </div>
+  <div className="flex items-start gap-4">
+    <div className="bg-white p-3 rounded-full">
+      <Image
+        src="https://img.icons8.com/ios-filled/50/000000/new-post.png"
+        alt="email-icon"
+        width={28}
+        height={28}
+        className="w-6 h-6 md:w-7 md:h-7"
+      />
+    </div>
+    <div>
+      <h2 className="text-lg md:text-xl font-medium">Email</h2>
+      <p className="text-sm md:text-base text-gray-300">anjayp271@gmail.com</p>
+    </div>
+  </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-white text-black p-3 rounded-full text-xl">
-                    🐙
-                  </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl font-medium">GitHub</h2>
-                    <a href="https://github.com/Kuuruel" target="_blank" rel="noopener noreferrer" className="text-sm md:text-base text-purple-400 hover:text-purple-300 transition">
-                      Kuuruel
-                    </a>
-                  </div>
-                </div>
-              </div>
+  <div className="flex items-start gap-4">
+    <div className="bg-white p-3 rounded-full">
+      <Image
+        src="https://img.icons8.com/ios-filled/50/000000/github.png"
+        alt="github-icon"
+        width={28}
+        height={28}
+        className="w-6 h-6 md:w-7 md:h-7"
+      />
+    </div>
+    <div>
+      <h2 className="text-lg md:text-xl font-medium">GitHub</h2>
+      <a
+        href="https://github.com/Kuuruel"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm md:text-base text-purple-400 hover:text-purple-300 transition"
+      >
+        Kuuruel
+      </a>
+    </div>
+  </div>
+</div>
+
 
               <div className="flex-1 border border-purple-500 p-6 lg:p-8 rounded-lg shadow-lg bg-purple-500/5" data-aos="fade-left">
                 <h2 className="text-xl md:text-2xl font-medium mb-6">Send Message</h2>
