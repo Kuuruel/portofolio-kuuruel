@@ -1,26 +1,51 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import 'animate.css';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+h1, h2, h3, h4, h5, h6,
+p, li, a, button, input, textarea {
+  font-family: 'Quicksand', sans-serif !important;
 }
 
-@theme inline {
+:root {
+   overflow-x: hidden;
+  scroll-behavior: smooth;
+  --background: #ffffff;
+  --foreground: #000000;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+
+  --font-sans: 'Quicksand', sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0c001b;
+    --foreground: #ffffff;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  transition: all 0.3s ease-in-out;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+@keyframes circle-blur {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+.animate-circle-blur {
+  animation: circle-blur 1.8s infinite ease-in-out;
 }

@@ -1,103 +1,495 @@
+'use client';
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { TypeAnimation } from 'react-type-animation';
+import Loading from "@/components/loading";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [darkMode, setDarkMode] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  useEffect(() => {
+  AOS.init({
+    duration: 1000,
+    once: true,
+  });
+}, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!loading && typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash) {
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 200);
+      }
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (loading) return;
+
+    const sections = document.querySelectorAll("section[id]");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            if (id) {
+              history.replaceState(null, "", `#${id}`);
+            }
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "-50% 0px -50% 0px",
+        threshold: 0
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [loading]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return (
+    <>
+      <header className="bg-black/50 backdrop-blur-[2px] py-4 fixed w-full h-[75px] top-0 z-50 animate__animated animate__fadeInDown">
+        <div className="w-[90%] mx-auto flex flex-row items-center justify-between">
+          <div>
+            <a href="#home" className="relative group text-xl md:text-2xl lg:text-3xl">
+              <span className="relative z-10">
+                <TypeAnimation
+                  sequence={["`Kuuruel",5000,"`Angga P",5000]}
+                  wrapper="span"
+                  speed={10}
+                  className="text-purple-500 font-medium"
+                  repeat={Infinity}
+                  cursor={false}
+                />
+              </span>
+              <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-300 opacity-0 blur-sm rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
+            </a>
+          </div>
+
+          <button
+            className="md:hidden text-white text-2xl"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {isMenuOpen ? '✕' : '☰'}
+          </button>
+
+          <nav className="hidden md:block">
+            <ul className="flex flex-row list-none gap-4 lg:gap-20 items-center">
+              <li>
+                <a href="#about" className="relative group text-sm lg:text-[1.3rem]">
+                  <span className="relative z-10">About</span>
+                  <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-300 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#skills" className="relative group text-sm lg:text-[1.3rem]">
+                  <span className="relative z-10">Skills</span>
+                  <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-300 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#projects" className="relative group text-sm lg:text-[1.3rem]">
+                  <span className="relative z-10">Projects</span>
+                  <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-300 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="relative group text-sm lg:text-[1.3rem]">
+                  <span className="relative z-10">Contact</span>
+                  <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-300 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
+                </a>
+              </li>
+              <li>
+                <a href="https://drive.google.com/uc?export=download&id=1HI7GT64HNzet-6Rbgup8VCtOfeU-tSbv" className="relative group text-sm lg:text-[1.3rem]">
+                  <span className="relative z-10">CV</span>
+                  <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-500 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
+                </a>
+              </li>
+              <li>
+                <button
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="text-sm lg:text-[1.3rem] rounded border-white hover:text-purple-400 transition"
+                >
+                  {darkMode ? '🌙' : '☀️'}
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          {isMenuOpen && (
+            <nav className="md:hidden absolute top-[75px] left-0 w-full bg-black/90 backdrop-blur-sm">
+              <ul className="flex flex-col list-none gap-4 p-4">
+                <li>
+                  <a href="#about" className="block py-2 text-lg" onClick={() => setIsMenuOpen(false)}>
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#skills" className="block py-2 text-lg" onClick={() => setIsMenuOpen(false)}>
+                    Skills
+                  </a>
+                </li>
+                <li>
+                  <a href="#projects" className="block py-2 text-lg" onClick={() => setIsMenuOpen(false)}>
+                    Projects
+                  </a>
+                </li>
+                <li>
+                  <a href="#contact" className="block py-2 text-lg" onClick={() => setIsMenuOpen(false)}>
+                    Contact
+                  </a>
+                </li>
+                <li>
+                  <a href="https://drive.google.com/uc?export=download&id=1HI7GT64HNzet-6Rbgup8VCtOfeU-tSbv" className="block py-2 text-lg">
+                    CV
+                  </a>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="text-lg rounded border-white hover:text-purple-400 transition"
+                  >
+                    {darkMode ? '🌙' : '☀️'}
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          )}
         </div>
+      </header>
+
+      <main className="flex flex-col pt-[5vh]">
+        <section id="home" className="flex flex-row items-center min-h-screen px-4">
+          <div className="w-[90%] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col text-center lg:text-left order-2 lg:order-1 animate__animated animate__fadeInLeft">
+              <h1 className="text-lg md:text-xl lg:text-2xl text-gray-400">Hello!, I am</h1>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl my-1">Angga Pradita</h1>
+              <div className="text-2xl md:text-4xl lg:text-6xl font-bold my-2 bg-gradient-to-r from-purple-500 to-purple-300 bg-clip-text text-transparent">
+                <TypeAnimation
+                  sequence={[
+                    "I'm Web Developer",
+                    1000,
+                    "I'm UI/UX Designer",
+                    1000,
+                    "I'm Kurumi Husband",
+                    1000,
+                    "I'm Alya Husband",
+                    1000,
+                    "I'm Emilia Husband",
+                    1000,
+                    "I'm Mahiru Husband",
+                    1000,
+                    "I'm Saika Husband",
+                    1000,
+                  ]}
+                  wrapper="span"
+                  speed={30}
+                  className="font-bold"
+                  repeat={Infinity}
+                  cursor={false}
+                />
+              </div>
+              <p className="text-sm md:text-lg lg:text-xl my-4 max-w-2xl">
+                I am currently studying as a student in the Software Engineering (RPL) department at SMK Negeri 1 Denpasar, Bali. While focusing on web development, I&#39;m also learning modern technologies like React, and actively building projects to improve my skills.
+              </p>
+              <a href="https://drive.google.com/uc?export=download&id=1HI7GT64HNzet-6Rbgup8VCtOfeU-tSbv" className="self-center lg:self-start">
+                <button className="border border-purple-700 rounded px-6 py-3 hover:bg-purple-950 transition mt-4 text-lg md:text-xl">
+                  Get my CV
+                </button>
+              </a>
+            </div>
+            <div className="flex justify-center items-center order-1 lg:order-2 animate__fadeInRight animate__animated">
+              <Image
+                src="/img/home2.png"
+                alt="imgHome"
+                width={700}
+                height={600}
+                className="w-96 h-96 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] object-contain"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section id="about" className="flex flex-col justify-center min-h-screen px-4 py-16">
+          <div className="w-[90%] mx-auto">
+            <h1 className="text-center text-3xl md:text-5xl lg:text-6xl my-12" data-aos="zoom-in-down">About Me</h1>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-center my-16">
+              <div data-aos="fade-right">
+                <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4" >Past</h3>
+                <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
+                  Started my journey in programming during middle school, learning basic HTML and CSS. Developed passion for creating digital experiences and solving problems through code.
+                </p>
+              </div>
+
+              <div data-aos="fade-up">
+                <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4">Present</h3>
+                <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
+                  Currently, I am a software engineering student at SMKN 1 Denpasar majoring in Software Engineering. I&#39;m currently learning HTML, CSS, JavaScript and interested in UI/UX design using tools like Figma.
+                </p>
+              </div>
+
+              <div data-aos="fade-left">
+                <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4">Future</h3>
+                <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
+                  Aspiring to become a full-stack developer, planning to master modern frameworks like React and Node.js. Looking forward to contributing to innovative projects and continuous learning.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-8 lg:gap-24">
+              <div className="text-center text-lg md:text-xl lg:text-[1.5rem] rounded-lg bg-purple-950 px-6 py-4 leading-tight" data-aos="fade-up-right">
+                2 Years <br />Experience
+              </div>
+              <div className="text-center text-lg md:text-xl lg:text-[1.5rem] rounded-lg bg-purple-950 px-6 py-4 leading-tight" data-aos="fade-up-left">
+                4+ Projects <br />Completed
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="skills" className="flex flex-col justify-center items-center min-h-screen px-4 py-16">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl my-12" data-aos="zoom-in-down">Skills</h1>
+
+          <div className="w-[90%] mx-auto" data-aos="fade-up-right">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl my-6 text-left">Front-end</h2>
+            <div className="flex flex-wrap justify-start gap-4 lg:gap-6 mb-8" data-aos="fade-up">
+              {[
+                { title: "HTML5", icon: "https://img.icons8.com/?size=100&id=20909&format=png&color=ffffff" },
+                { title: "CSS", icon: "https://img.icons8.com/?size=100&id=21278&format=png&color=ffffff" },
+                { title: "JavaScript", icon: "https://img.icons8.com/?size=100&id=108784&format=png&color=ffffff" },
+                { title: "Tailwind CSS", icon: "https://img.icons8.com/?size=100&id=x7XMNGh2vdqA&format=png&color=ffffff" },
+                { title: "Next.js", icon: "https://img.icons8.com/?size=100&id=MWiBjkuHeMVq&format=png&color=ffffff" },
+                { title: "TypeScript", icon: "https://img.icons8.com/?size=100&id=uJM6fQYqDaZK&format=png&color=ffffff" },
+              ].map((skill, i) => (
+                <div key={i} className="cursor-default flex flex-col sm:flex-row items-center border border-purple-500 bg-purple-500/10 backdrop-blur-sm rounded-lg p-3 lg:p-4 hover:shadow-[0_0_20px_rgba(255,0,255,0.5)] transition-all duration-300">
+                  <Image className="mb-2 sm:mb-0 sm:ml-2" src={skill.icon} alt={skill.title} width={30} height={30} />
+                  <h3 className="text-sm md:text-lg lg:text-xl sm:mx-4 text-center">{skill.title}</h3>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="text-2xl md:text-3xl lg:text-4xl my-6 text-left">Back-end</h2>
+            <div className="flex flex-wrap justify-start gap-4 lg:gap-6 mb-8" data-aos="fade-up">
+              {[
+                { title: "Node.js", icon: "https://img.icons8.com/?size=100&id=54087&format=png&color=ffffff" },
+                { title: "PHP", icon: "https://img.icons8.com/?size=100&id=UGYn5TapNioV&format=png&color=ffffff" },
+                { title: "Laravel", icon: "https://img.icons8.com/?size=100&id=lRjcvhvtR81o&format=png&color=ffffff" },
+                { title: "Firebase", icon: "https://img.icons8.com/?size=100&id=62452&format=png&color=ffffff" },
+                { title: "MySQL", icon: "https://img.icons8.com/?size=100&id=UFXRpPFebwa2&format=png&color=ffffff" },
+              ].map((skill, i) => (
+                <div key={i} className="cursor-default flex flex-col sm:flex-row items-center border border-purple-500 bg-purple-500/10 backdrop-blur-sm rounded-lg p-3 lg:p-4 hover:shadow-[0_0_20px_rgba(255,0,255,0.5)] transition-all duration-300">
+                  <Image className="mb-2 sm:mb-0 sm:ml-2" src={skill.icon} alt={skill.title} width={30} height={30} />
+                  <h3 className="text-sm md:text-lg lg:text-xl sm:mx-4 text-center">{skill.title}</h3>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="text-2xl md:text-3xl lg:text-4xl my-6 text-left">Miscellaneous</h2>
+            <div className="flex flex-wrap justify-start gap-4 lg:gap-6" data-aos="fade-up">
+              {[
+                { title: "Git", icon: "https://img.icons8.com/?size=100&id=20906&format=png&color=ffffff" },
+                { title: "GitHub", icon: "https://img.icons8.com/?size=100&id=16318&format=png&color=ffffff" },
+                { title: "VS Code", icon: "https://img.icons8.com/?size=100&id=9OGIyU8hrxW5&format=png&color=ffffff" },
+                { title: "Figma", icon: "https://img.icons8.com/?size=100&id=zfHRZ6i1Wg0U&format=png&color=ffffff" },
+                { title: "Canva", icon: "https://img.icons8.com/?size=100&id=iWw83PVcBpLw&format=png&color=ffffff" },
+              ].map((skill, i) => (
+                <div key={i} className="cursor-default flex flex-col sm:flex-row items-center border border-purple-500 bg-purple-500/10 backdrop-blur-sm rounded-lg p-3 lg:p-4 hover:shadow-[0_0_20px_rgba(255,0,255,0.5)] transition-all duration-300">
+                  <Image className="mb-2 sm:mb-0 sm:ml-2" src={skill.icon} alt={skill.title} width={30} height={30} />
+                  <h3 className="text-sm md:text-lg lg:text-xl sm:mx-4 text-center">{skill.title}</h3>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" className="flex flex-col items-center justify-center min-h-screen px-4 py-16">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl my-12" data-aos="zoom-in-down">Projects</h1>
+          <div className="w-[90%] mx-auto">
+            {[
+              {
+                title: "Web Profile Karbiter Group",
+                desc: "My independent project is to create information about our group. This website only uses HTML, CSS, and JS.",
+                link: "https://karbiterr.netlify.app/",
+                img: "/img/Karbiter.png"
+              },
+              {
+                title: "Web Profile DKV",
+                desc: "Project that I made with my group to create various information about the DKV department at our school.",
+                link: "https://web-profil-dkv-2.netlify.app/",
+                img: "/img/Profil dkv.png"
+              },
+              {
+                title: "Design Web Portfolio",
+                desc: "First design of my Portfolio Web",
+                link: "https://www.figma.com/design/2xSA3samaMN3oAE2Z3PvVw/Desain-Web-Angga-07?node-id=0-1",
+                img: "/img/Figma.png"
+              },
+              {
+                title: "Design Web BlueBook",
+                desc: "Web design I made for school purposes",
+                link: "https://www.figma.com/design/jfxy06xXxPR7H1GQvmmNjO/Untitled?node-id=0-1",
+                img: "/img/bluebook.png"
+              }
+            ].map((proj, idx) => (
+              <div key={idx} className="flex flex-col lg:flex-row items-center min-h-[70vh] gap-8 lg:gap-12">
+                <div className="flex flex-col items-center justify-center w-full lg:w-1/2" data-aos="fade-right">
+                  <Image 
+                    src={proj.img} 
+                    alt={proj.title} 
+                    width={600} 
+                    height={400} 
+                    className="w-full max-w-2xl border-2 rounded-xl border-purple-500 object-cover" 
+                  />
+                </div>
+                <div className="flex flex-col justify-center w-full lg:w-1/2 gap-4 text-center lg:text-left" data-aos="fade-left">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium">{proj.title}</h2>
+                  <p className="text-sm md:text-lg lg:text-xl text-gray-300">{proj.desc}</p>
+                  <div>
+                    <a href={proj.link} target="_blank" rel="noopener noreferrer">
+                      <button className="rounded my-2 py-3 px-6 border border-purple-500 hover:bg-purple-950 transition text-sm md:text-base">
+                        Go to project
+                      </button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="flex flex-col items-center min-h-screen px-4 py-16">
+          <div className="w-[90%] mx-auto">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl text-center my-12" data-aos="zoom-in-down">Contact</h1>
+            <p className="text-sm md:text-lg text-center text-gray-300 mb-12 max-w-2xl mx-auto" data-aos="zoom-in-down">
+              Feel free to reach out to me for any projects, collaborations, or just to say hello. I&#39;m always excited to connect with fellow developers and creators.
+            </p>
+
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+              <div className="flex-1 flex flex-col gap-6 lg:gap-8" data-aos="fade-right">
+                <div className="flex items-start gap-4">
+                  <div className="bg-white text-black p-3 rounded-full text-xl">
+                    🏠
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">Address</h2>
+                    <p className="text-sm md:text-base text-gray-300">Indonesia, Bali.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="bg-white text-black p-3 rounded-full text-xl">
+                    📞
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">Phone</h2>
+                    <p className="text-sm md:text-base text-gray-300">+62 8953-9234-1700</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="bg-white text-black p-3 rounded-full text-xl">
+                    ✉️
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">Email</h2>
+                    <p className="text-sm md:text-base text-gray-300">anjayp271@gmail.com</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="bg-white text-black p-3 rounded-full text-xl">
+                    🐙
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">GitHub</h2>
+                    <a href="https://github.com/Kuuruel" target="_blank" rel="noopener noreferrer" className="text-sm md:text-base text-purple-400 hover:text-purple-300 transition">
+                      Kuuruel
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1 border border-purple-500 p-6 lg:p-8 rounded-lg shadow-lg bg-purple-500/5" data-aos="fade-left">
+                <h2 className="text-xl md:text-2xl font-medium mb-6">Send Message</h2>
+                <form className="flex flex-col gap-4">
+                  <input
+                    type="text"
+                    name="fullName"
+                    placeholder="Full Name"
+                    className="bg-transparent border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition text-sm md:text-base"
+                    required
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    className="bg-transparent border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition text-sm md:text-base"
+                    required
+                  />
+                  <textarea
+                    name="message"
+                    placeholder="Type your Message..."
+                    rows={4}
+                    className="bg-transparent border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition resize-none text-sm md:text-base"
+                    required
+                  ></textarea>
+                  <button 
+                    type="submit"
+                    className="bg-purple-500 hover:bg-purple-700 font-semibold py-3 mt-4 rounded transition text-sm md:text-base"
+                  >
+                    Send Message
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="border-t border-purple-500/30 py-6 mt-12">
+        <div className="w-[90%] mx-auto px-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs md:text-sm text-gray-400">
+            <p>Design and Develop by Kuuruel</p>
+            <p>@Copyright - 2024</p>
+          </div>
+        </div>
       </footer>
-    </div>
+    </>
   );
 }
