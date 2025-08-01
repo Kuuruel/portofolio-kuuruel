@@ -6,17 +6,34 @@ import { TypeAnimation } from 'react-type-animation';
 import Loading from "@/components/loading";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { FiSun, FiMoon } from "react-icons/fi";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentTheme, setCurrentTheme] = useState<string>('');
 
   useEffect(() => {
-  AOS.init({
-    duration: 1000,
-    once: true,
-  });
-}, []);
+    AOS.init({ duration: 1000, once: true });
+
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const theme = storedTheme || (prefersDark ? "dark" : "light");
+      
+      document.documentElement.setAttribute("data-theme", theme);
+      setCurrentTheme(theme);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (typeof window !== 'undefined') {
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      setCurrentTheme(newTheme);
+    }
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1000);
@@ -73,7 +90,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="bg-black/50 backdrop-blur-[2px] py-4 fixed w-full h-[75px] top-0 z-50 animate__animated animate__fadeInDown">
+      <header className="bg-black/10 backdrop-blur-[2px] py-4 fixed w-full h-[75px] top-0 z-50 animate__animated animate__fadeInDown">
         <div className="w-[90%] mx-auto flex flex-row items-center justify-between">
           <div>
             <a href="#home" className="relative group text-xl md:text-2xl lg:text-3xl">
@@ -130,11 +147,25 @@ export default function Home() {
                   <span className="absolute left-0 top-1/2 w-full h-2 bg-purple-500 opacity-0 blur-md rounded group-hover:opacity-100 transition-all duration-300 -translate-y-1/2"></span>
                 </a>
               </li>
+               <li>
+                  <button
+                    onClick={toggleTheme}
+                    className="cursor-pointer group relative flex items-center justify-center w-10 h-10 rounded-full border border-purple-500 transition-all duration-300
+                              dark:bg-purple-950/10 hover:shadow-[0_0_10px_rgba(128,0,255,0.5)] text-purple-700 dark:text-white"
+                  >
+                    {currentTheme === 'dark' ? (
+                      <FiSun size={20} className="transition-transform duration-300 group-hover:scale-110" />
+                    ) : (
+                      <FiMoon size={20} className="transition-transform duration-300 group-hover:scale-110" />
+                    )}
+                    <span className="sr-only">Toggle Theme</span>
+                  </button>
+                </li>
             </ul>
           </nav>
 
           {isMenuOpen && (
-            <nav className="md:hidden absolute top-[75px] left-0 w-full bg-black/90 backdrop-blur-sm">
+            <nav className="md:hidden absolute top-[75px] left-0 w-full bg-black/10">
               <ul className="flex flex-col list-none gap-4 p-4">
                 <li>
                   <a href="#about" className="block py-2 text-lg" onClick={() => setIsMenuOpen(false)}>
@@ -160,6 +191,20 @@ export default function Home() {
                   <a href="https://drive.google.com/uc?export=download&id=1ofqczf9pB7TsG_BW7PvSp7HstdH20hBk" className="block py-2 text-lg">
                     CV
                   </a>
+                </li>
+                <li>
+                  <button
+                    onClick={toggleTheme}
+                    className="cursor-pointer group relative flex items-center justify-center w-10 h-10 rounded-full border border-purple-500 transition-all duration-300
+                              dark:bg-purple-950/10 hover:shadow-[0_0_10px_rgba(128,0,255,0.5)] text-purple-700 dark:text-white"
+                  >
+                    {currentTheme === 'dark' ? (
+                      <FiSun size={20} className="transition-transform duration-300 group-hover:scale-110" />
+                    ) : (
+                      <FiMoon size={20} className="transition-transform duration-300 group-hover:scale-110" />
+                    )}
+                    <span className="sr-only">Toggle Theme</span>
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -203,7 +248,7 @@ export default function Home() {
               </p>
               <a
                 href="https://drive.google.com/uc?export=download&id=1ofqczf9pB7TsG_BW7PvSp7HstdH20hBk"
-                className="self-center lg:self-start border border-purple-700 rounded px-6 py-3 hover:bg-purple-950 transition mt-4 text-lg md:text-xl cursor-pointer inline-block text-center"
+                className="self-center lg:self-start border border-purple-700 rounded px-6 py-3 hover:bg-purple-950/20 transition mt-4 text-lg md:text-xl cursor-pointer inline-block text-center"
               >
                 Get my CV
               </a>
@@ -228,31 +273,31 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-center my-16">
               <div data-aos="fade-right">
                 <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4" >Past</h3>
-                <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
+                <p className="leading-relaxed text-sm md:text-lg lg:text-xl">
                   Started my journey in programming during middle school, learning basic HTML and CSS. Developed passion for creating digital experiences and solving problems through code.
                 </p>
               </div>
 
               <div data-aos="fade-up">
                 <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4">Present</h3>
-                <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
+                <p className="leading-relaxed text-sm md:text-lg lg:text-xl">
                   Currently, I am a software engineering student at SMKN 1 Denpasar majoring in Software Engineering. I&#39;m currently learning JavaScript, Laravel, React, and UI/UX design using tools like Figma.
                 </p>
               </div>
 
               <div data-aos="fade-left">
                 <h3 className="text-purple-500 text-2xl md:text-3xl lg:text-4xl font-medium mb-4">Future</h3>
-                <p className="text-gray-300 leading-relaxed text-sm md:text-lg lg:text-xl">
+                <p className="leading-relaxed text-sm md:text-lg lg:text-xl">
                   Aspiring to become a full-stack developer, planning to master modern frameworks like Node.js and React. Looking forward to contributing to innovative projects and continuous learning.
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap justify-center gap-8 lg:gap-24">
-              <div className="text-center text-lg md:text-xl lg:text-[1.5rem] rounded-lg bg-purple-950 px-6 py-4 leading-tight" data-aos="fade-up-right">
+              <div className="text-center text-lg md:text-xl lg:text-[1.5rem] rounded-lg border border-purple-500 bg-purple-500/10 px-6 py-4 leading-tight" data-aos="fade-up-right">
                 2 Years <br />Experience
               </div>
-              <div className="text-center text-lg md:text-xl lg:text-[1.5rem] rounded-lg bg-purple-950 px-6 py-4 leading-tight" data-aos="fade-up-left">
+              <div className="text-center text-lg md:text-xl lg:text-[1.5rem] rounded-lg border border-purple-500 bg-purple-500/10 px-6 py-4 leading-tight" data-aos="fade-up-left">
                 4+ Projects <br />Completed
               </div>
             </div>
@@ -354,10 +399,10 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col justify-center w-full lg:w-1/2 gap-4 text-center lg:text-left" data-aos="fade-left">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium">{proj.title}</h2>
-                  <p className="text-sm md:text-lg lg:text-xl text-gray-300">{proj.desc}</p>
+                  <p className="text-sm md:text-lg lg:text-xl">{proj.desc}</p>
                   <div>
                     <a href={proj.link} target="_blank" rel="noopener noreferrer">
-                      <button className="rounded my-2 py-3 px-6 border border-purple-500 hover:bg-purple-950 transition text-sm md:text-base">
+                      <button className="cursor-pointer rounded my-2 py-3 px-6 border border-purple-500 hover:bg-purple-950/30 transition text-sm md:text-base">
                         Go to project
                       </button>
                     </a>
@@ -371,84 +416,83 @@ export default function Home() {
         <section id="contact" className="flex flex-col items-center min-h-screen px-4 py-16">
           <div className="w-[90%] mx-auto">
             <h1 className="text-3xl md:text-5xl lg:text-6xl text-center my-12" data-aos="zoom-in-down">Contact</h1>
-            <p className="text-sm md:text-lg text-center text-gray-300 mb-12 max-w-2xl mx-auto" data-aos="zoom-in-down">
+            <p className="text-sm md:text-lg text-center  mb-12 max-w-2xl mx-auto" data-aos="zoom-in-down">
               Feel free to reach out to me for any projects, collaborations, or just to say hello. I&#39;m always excited to connect with fellow developers and creators.
             </p>
 
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
               <div className="flex-1 flex flex-col gap-6 lg:gap-8" data-aos="fade-right">
-  <div className="flex items-start gap-4">
-    <div className="bg-white p-3 rounded-full">
-      <Image
-        src="https://img.icons8.com/ios-filled/50/000000/marker.png"
-        alt="address-icon"
-        width={28}
-        height={28}
-        className="w-6 h-6 md:w-7 md:h-7"
-      />
-    </div>
-    <div>
-      <h2 className="text-lg md:text-xl font-medium">Address</h2>
-      <p className="text-sm md:text-base text-gray-300">Indonesia, Bali.</p>
-    </div>
-  </div>
+                <div className="flex items-start gap-4">
+                  <div className="bg-white p-3 rounded-full">
+                    <Image
+                      src="https://img.icons8.com/ios-filled/50/000000/marker.png"
+                      alt="address-icon"
+                      width={28}
+                      height={28}
+                      className="w-6 h-6 md:w-7 md:h-7"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">Address</h2>
+                    <p className="text-sm md:text-base ">Indonesia, Bali.</p>
+                  </div>
+                </div>
 
-  <div className="flex items-start gap-4">
-    <div className="bg-white p-3 rounded-full">
-      <Image
-        src="https://img.icons8.com/ios-filled/50/000000/phone.png"
-        alt="phone-icon"
-        width={28}
-        height={28}
-        className="w-6 h-6 md:w-7 md:h-7"
-      />
-    </div>
-    <div>
-      <h2 className="text-lg md:text-xl font-medium">Phone</h2>
-      <p className="text-sm md:text-base text-gray-300">+62 8953-9234-1700</p>
-    </div>
-  </div>
+                <div className="flex items-start gap-4">
+                  <div className="bg-white p-3 rounded-full">
+                    <Image
+                      src="https://img.icons8.com/ios-filled/50/000000/phone.png"
+                      alt="phone-icon"
+                      width={28}
+                      height={28}
+                      className="w-6 h-6 md:w-7 md:h-7"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">Phone</h2>
+                    <p className="text-sm md:text-base ">+62 8953-9234-1700</p>
+                  </div>
+                </div>
 
-  <div className="flex items-start gap-4">
-    <div className="bg-white p-3 rounded-full">
-      <Image
-        src="https://img.icons8.com/ios-filled/50/000000/new-post.png"
-        alt="email-icon"
-        width={28}
-        height={28}
-        className="w-6 h-6 md:w-7 md:h-7"
-      />
-    </div>
-    <div>
-      <h2 className="text-lg md:text-xl font-medium">Email</h2>
-      <p className="text-sm md:text-base text-gray-300">anjayp271@gmail.com</p>
-    </div>
-  </div>
+                <div className="flex items-start gap-4">
+                  <div className="bg-white p-3 rounded-full">
+                    <Image
+                      src="https://img.icons8.com/ios-filled/50/000000/new-post.png"
+                      alt="email-icon"
+                      width={28}
+                      height={28}
+                      className="w-6 h-6 md:w-7 md:h-7"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">Email</h2>
+                    <p className="text-sm md:text-base ">anjayp271@gmail.com</p>
+                  </div>
+                </div>
 
-  <div className="flex items-start gap-4">
-    <div className="bg-white p-3 rounded-full">
-      <Image
-        src="https://img.icons8.com/ios-filled/50/000000/github.png"
-        alt="github-icon"
-        width={28}
-        height={28}
-        className="w-6 h-6 md:w-7 md:h-7"
-      />
-    </div>
-    <div>
-      <h2 className="text-lg md:text-xl font-medium">GitHub</h2>
-      <a
-        href="https://github.com/Kuuruel"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-sm md:text-base text-purple-400 hover:text-purple-300 transition"
-      >
-        Kuuruel
-      </a>
-    </div>
-  </div>
-</div>
-
+                <div className="flex items-start gap-4">
+                  <div className="bg-white p-3 rounded-full">
+                    <Image
+                      src="https://img.icons8.com/ios-filled/50/000000/github.png"
+                      alt="github-icon"
+                      width={28}
+                      height={28}
+                      className="w-6 h-6 md:w-7 md:h-7"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg md:text-xl font-medium">GitHub</h2>
+                    <a
+                      href="https://github.com/Kuuruel"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm md:text-base text-purple-400 hover:text-purple-300 transition"
+                    >
+                      Kuuruel
+                    </a>
+                  </div>
+                </div>
+              </div>
 
               <div className="flex-1 border border-purple-500 p-6 lg:p-8 rounded-lg shadow-lg bg-purple-500/5" data-aos="fade-left">
                 <h2 className="text-xl md:text-2xl font-medium mb-6">Send Message</h2>
@@ -457,26 +501,26 @@ export default function Home() {
                     type="text"
                     name="fullName"
                     placeholder="Full Name"
-                    className="bg-transparent border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition text-sm md:text-base"
+                    className="bg-transparent placeholder-gray-500 border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition text-sm md:text-base"
                     required
                   />
                   <input
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className="bg-transparent border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition text-sm md:text-base"
+                    className="bg-transparent placeholder-gray-500 border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition text-sm md:text-base"
                     required
                   />
                   <textarea
                     name="message"
                     placeholder="Type your Message..."
                     rows={4}
-                    className="bg-transparent border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition resize-none text-sm md:text-base"
+                    className="bg-transparent placeholder-gray-500 border-b border-gray-400 py-3 outline-none focus:border-purple-500 transition resize-none text-sm md:text-base"
                     required
                   ></textarea>
                   <button 
                     type="submit"
-                    className="bg-purple-500 hover:bg-purple-700 font-semibold py-3 mt-4 rounded transition text-sm md:text-base"
+                    className="border border-purple-700 hover:bg-purple-950/30 font-medium py-3 mt-4 rounded transition text-sm md:text-base cursor-pointer"
                   >
                     Send Message
                   </button>
@@ -489,7 +533,7 @@ export default function Home() {
 
       <footer className="border-t border-purple-500/30 py-6 mt-12">
         <div className="w-[90%] mx-auto px-4">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs md:text-sm text-gray-400">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs md:text-sm">
             <p>Design and Develop by Kuuruel</p>
             <p>@Copyright - 2024</p>
           </div>

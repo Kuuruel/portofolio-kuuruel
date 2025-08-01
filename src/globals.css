@@ -8,28 +8,39 @@ p, li, a, button, input, textarea {
 }
 
 :root {
-   overflow-x: hidden;
+  overflow-x: hidden;
   scroll-behavior: smooth;
-  --background: #ffffff;
-  --foreground: #000000;
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
   --font-sans: 'Quicksand', sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+[data-theme="dark"] {
+  --background: #0c001b;
+  --foreground: #ffffff;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --background: #0c001b;
     --foreground: #ffffff;
   }
 }
 
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
+}
+
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--background);
+  color: var(--foreground);
   transition: all 0.3s ease-in-out;
   font-family: var(--font-sans);
   overflow-x: hidden;
