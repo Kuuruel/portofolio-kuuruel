@@ -441,22 +441,6 @@ export default function Home() {
                 <div className="flex items-start gap-4">
                   <div className="bg-white p-3 rounded-full">
                     <Image
-                      src="https://img.icons8.com/ios-filled/50/000000/phone.png"
-                      alt="phone-icon"
-                      width={28}
-                      height={28}
-                      className="w-6 h-6 md:w-7 md:h-7"
-                    />
-                  </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl font-medium">Phone</h2>
-                    <p className="text-sm md:text-base ">+62 8953-9234-1700</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="bg-white p-3 rounded-full">
-                    <Image
                       src="https://img.icons8.com/ios-filled/50/000000/new-post.png"
                       alt="email-icon"
                       width={28}
